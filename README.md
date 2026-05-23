@@ -1,32 +1,67 @@
 # NeuroNLP
 
-This repo contains the code for our NLP2 Project C report, **Rethinking Brain-Model Alignment: A Case for Text Embedders**.
+This repository contains the code for the NLP2 Project C report **“Rethinking Brain-Model Alignment: A Case for Text Embedders.”** The project compares the brain predictivity of sentence representations extracted from **Qwen3-8B**, an autoregressive language model, and **Qwen3-Embedding-8B**, a dedicated text embedding model, using the Pereira et al. fMRI dataset.
 
-The project compares sentence representations from two Qwen models on the Pereira et al. fMRI dataset:
+## Project overview
 
-- **Qwen3-8B**, an autoregressive LLM
-- **Qwen3-Embedding-8B**, a text embedding model
+Large language models are increasingly used to model neural responses to language. Most work focuses on autoregressive models trained with next-token prediction, but it remains unclear whether these models are always the best source of sentence-level representations for brain encoding.
 
-The main question is whether a model trained specifically for text embeddings gives better brain-predictive sentence representations than a standard next-token prediction model.
+This project asks whether a dedicated text embedding model can better predict sentence-level fMRI responses than an autoregressive LLM from the same model family. We compare the models across layers, experiments, and complementary analyses.
 
-## What this project does
+## Research questions
 
-We use Experiments 2 and 3 from the Pereira et al. dataset. The original stimuli are passages, but the analyses here are done at the sentence level:
+The project addresses two main questions:
 
-- Experiment 2: 384 sentences
-- Experiment 3: 243 sentences
+1. Does Qwen3-Embedding-8B produce more brain-predictive sentence representations than Qwen3-8B?
+2. Does the relative advantage of each model depend on the semantic structure of the stimulus set?
 
-For both models, we extract representations from all 37 layers. Each sentence representation is taken from the final non-padding token of each layer.
+## Dataset
 
-We then compare the models using:
+We use Experiments 2 and 3 from the Pereira et al. fMRI dataset.
 
-- voxel-wise Ridge encoding models
-- random embedding baselines
-- paired statistical tests
-- Representational Similarity Analysis (RSA)
-- a residual analysis where broad topic information is reduced
+- **Experiment 2:** 96 passages, 384 sentence stimuli.
+- **Experiment 3:** 72 passages, 243 sentence stimuli.
+- Analyses are conducted at the **sentence level**.
+- fMRI responses are restricted to the left-hemisphere language network ROI.
 
-## Files
+The dataset is not included in this repository and must be obtained separately.
+
+## Models
+
+The project compares:
+
+- **Qwen3-8B:** autoregressive LLM trained with next-token prediction.
+- **Qwen3-Embedding-8B:** dedicated embedding model trained for semantic similarity and retrieval.
+
+For both models, representations are extracted from all 37 hidden-state layers, including the initial embedding layer. Sentence representations are obtained using the final non-padding token from each layer.
+
+## Analyses
+
+The repository includes code for:
+
+- extracting sentence-level representations from both models;
+- fitting voxel-wise Ridge encoding models;
+- evaluating encoding accuracy with cross-validation;
+- computing random embedding baselines;
+- comparing models with paired statistical tests;
+- running Representational Similarity Analysis (RSA);
+- applying a residual method to reduce broad topic-level information.
+
+## Repository structure
 
 ```text
-extract_embeddings.ipynb
+NeuroNLP/
+│
+├── extract_embeddings.ipynb
+│   Extracts layer-wise sentence embeddings from Qwen3-8B and Qwen3-Embedding-8B.
+│
+├── further_analysis.ipynb
+│   Runs additional analyses, including random baselines, RSA, and residual analyses.
+│
+├── results/
+│   Stores generated embeddings, figures, and analysis outputs.
+│
+├── data/
+│   Expected location for Pereira dataset files. The dataset itself is not included.
+│
+└── README.md
